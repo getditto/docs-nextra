@@ -1,5 +1,14 @@
 {
-    "intro": "Welcome To Ditto...",
-    "js": "Welcome To Ditto Javascript...",
-    "random": "abcd123"
+    "intro": {
+        "text":"Ditto",
+        "tags": ["javascript", "advanced"]
+    },
+    "js": {
+        "text":"Ditto",
+        "tags": ["javascript", "advanced"]
+    },
+    "random": {
+        "text":"Ditto",
+        "tags": ["javascript", "advanced"]
+    }
 }

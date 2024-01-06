@@ -1,4 +1,10 @@
 {
-    "ditto_name": "Ditto",
-    "ditto_name_federal": "Ditto USA!"
+    "ditto_name": {
+        "text":"Ditto",
+        "tags": ["javascript", "advanced"]
+    },
+    "ditto_name_federal": {
+        "text":"Ditto",
+        "tags": ["javascript", "advanced"]
+    }
 }

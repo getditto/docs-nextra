@@ -1,0 +1,11 @@
+{
+    "swift" : "Swift",
+    "kotlin" : "Kotlin",
+    "javastript_web" : "Javascript - Web",
+    "javastript_nodejs" : "Javascript - Node.js",
+    "java" : "Java",
+    "cpp" : "C++",
+    "csharp" : "C#",
+    "rust": "Rust"
+}
+  

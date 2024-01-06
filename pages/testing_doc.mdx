@@ -2,9 +2,13 @@ import {importTopic } from '../helpers/fetchText.tsx'
 import {Topic} from '../topics'
 import { GetTopic } from '../components/topic.tsx'
 
-# Welcome to {Topic["ditto_name_federal"]}
+# Welcome to Ditto
 
-{Topic["js"]}
+{Topic("generic_quickstart_intro")}
+
+```js
+{Topic("js")}
+```
 
 # <GetTopic id="random"/>
 
@@ -13,3 +17,7 @@ foobar
 import { default as MyButton } from '../components/counters.tsx'
 
 <MyButton/>
+
+# Heading...
+
+<SomeText />
