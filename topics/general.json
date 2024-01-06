@@ -3,8 +3,12 @@
         "text":"Ditto",
         "tags": ["javascript", "advanced"]
     },
+    "generic_quickstart_intro": {
+        "text":"Was the night before christmas",
+        "tags": ["javascript", "advanced"]
+    },
     "js": {
-        "text":"Ditto",
+        "text":"const foo = bar();",
         "tags": ["javascript", "advanced"]
     },
     "random": {

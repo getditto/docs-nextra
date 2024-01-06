@@ -33,5 +33,13 @@ const Topics: Topics = {
  */
 export type Topic = keyof typeof Topics;
 export const Topic = (id:Topic): string => {
-    return Topics[id].text;
+    
+    let text = "NO TEXT FOUND - PLACEHOLDER";
+    try {
+        text = Topics[id].text
+    } catch (e) {
+        console.log(e);
+    }
+    
+    return text;
 }
