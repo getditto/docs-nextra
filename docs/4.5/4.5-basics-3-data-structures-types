@@ -1,0 +1,227 @@
+---
+title: Data Structures and Types
+slug: basics/data-structures-and-types
+createdAt: 2023-08-02T21:55:32.679Z
+updatedAt: 2023-12-15T18:13:06.670Z
+---
+
+Ditto stores data in structured JSON-like document objects. Each document consists of sets of human‑readable fields that identify and represent the information the document stores.&#x20;
+
+# Documents and Collections
+
+Each document is nested with a hash-stable tree structure that self-describes the data to be stored and provides the predetermined rules that ensure data consistency and accuracy.&#x20;
+
+The following snippet provides an example of a basic JSON-encoded document object:
+
+```json
+{
+  "_id": "abc123",
+  "make": "Hyundai",
+  "year": 2018,
+  "color": "black"
+}
+```
+
+## Fields
+
+A single document consists of one or more *fields *that self‑describe the data it encodes. Each field is associated with a *value*:
+
+*   1.  *Field* — The name identifying the data. (See [Fields and Key-Values](docId\:dg-NwzCc3CmXTQTUUWTwi))
+
+
+    2.  *Value* — The value that holds the actual data to store. (See [Fields and Key-Values](docId\:dg-NwzCc3CmXTQTUUWTwi))
+
+*   ![](https://archbee-image-uploads.s3.amazonaws.com/qoRkNxW5fJ81r_NqVpc8C/uIoehA_cK_sRrfBsdtrNZ_image.png)
+
+## Document Identifiers
+
+The first set of fields within each document uniquely identifies the data that its document object encodes. When grouped in a collection, this `_id` serves as the primary key* *identifying the document in the collection.&#x20;
+
+### Assigning \_id
+
+Ditto automatically generates and assigns each new document a unique identifier, or `_id`. However, if desired, you can pass your own custom `_id` as a parameter when performing an `INSERT` operation to create a new document. (See [CREATE](docId\:BdqJxnd0CqGABk15wXue0))
+
+In addition to having the option to supply your own `_id`, in complex scenarios where you want to create a more intricate and unique identifier for your documents, you can combine two or more distinct elements to form a composite key.&#x20;
+
+For example, the following snippet demonstrates how to create (`INSERT`) a new document with a composite key formed by the `vin`, `make`, and `year` fields — all of which remain immutable. So, once set at initial document creation, their values cannot be changed.&#x20;
+
+:::codeblocktabs
+```swift
+let result = await ditto.store.execute(
+  query: "INSERT INTO cars DOCUMENTS (:newCar)",
+  arguments: [
+    newCar: [ "_id": "123", "color": "blue"]
+  ]);
+
+// "123"
+print(result.mutatedDocumentIDs()[0])
+```
+
+```kotlin
+var result = ditto.store.execute(
+  "INSERT INTO cars DOCUMENTS (:newCar)",
+  mapOf("newCar" to mapOf("_id" to "123", "color" to "blue")))
+  
+// "507f191e810c19729de860ea"
+println(result.mutatedDocumentIDs().first())
+```
+
+```javascript
+const newCar = {
+  _id: "123",
+  color: "blue"
+}
+
+const result = await ditto.store.execute(`
+  INSERT INTO cars
+  DOCUMENTS (:newCar)`,
+  { newCar });
+
+// "123"
+console.log(result.mutatedDocumentIDs()[0])
+```
+
+```java
+Map<String, String> newCar = new HashMap<>();
+newCar.put("_id", "123");
+newCar.put("color", "blue");
+
+DittoQueryResult result = (DittoQueryResult) ditto.store.execute(
+    "INSERT INTO cars DOCUMENTS (:newCar)",
+    Collections.singletonMap("newCar", newCar),
+    new Continuation<>() {
+        @NonNull
+        @Override
+        public CoroutineContext getContext() {
+            return EmptyCoroutineContext.INSTANCE;
+        }
+
+        @Override
+        public void resumeWith(@NonNull Object o) {
+            if (o instanceof Result.Failure) {
+                // Handle failure
+            }
+        }
+    }
+);
+
+// "123"
+System.out.println(result.mutatedDocumentIDs()[0]);
+```
+
+```csharp
+var insertArgs = new Dictionary<string, object>();
+insertArgs.Add("newCar", new { _id = "123", color = "blue" });
+
+var result = await ditto.Store.ExecuteAsync(
+  "INSERT INTO your_collection_name DOCUMENTS (:newCar)",
+  insertArgs);
+  
+// "123"
+result.MutatedDocumentIds.ForEach(id => Console.WriteLine(id));
+```
+
+```cpp
+std::map<std::string, std::map<std::string, std::string>> args;
+args["newCar"] = {{"_id", "123"},{"color", "blue"}};
+
+auto result = ditto.get_store().execute(
+  "INSERT INTO cars DOCUMENTS (:newCar)",
+  args).get();
+
+// "123"
+std::cout << result.mutated_document_ids()[0].to_string();
+```
+
+```rust
+struct Args {
+  newCar: Car,
+}
+struct Car {
+  _id: String,
+  color: String
+}
+
+// ...
+
+let args = Args {
+  newCar: Car {
+    _id: "123".to_string(),
+    color: "blue".to_string()
+  },
+};
+
+let result = ditto.store().execute(
+  "INSERT INTO cars DOCUMENTS (:newCar)",
+  args); 
+
+// "123"
+println!("{}", result.mutated_document_ids()[0].to_string())
+```
+:::
+
+:::hint{type="info"}
+For more comprehensive information and how-to instructions, see the *Platform Manual *> [CRUD Operations](docId\:LBRSIPPkeZdqTGBM4i5NN).
+:::
+
+# Data Formatting
+
+As a semi-structured database, data formatting in Ditto is categorized into two main groups:
+
+*   *Data Types* — Advanced types that guarantee conflict-free resolution during merging, which includes the `REGISTER`, `MAP`, and `ATTACHMENT` data type.
+
+    The default data type is `REGISTER` ; you'll use other data types in specific scenarios where appropriate.&#x20;
+
+
+*   *Scalar subtypes* — Basic primitive types, such as `string` and `boolean`, and the JSON  object, which functions as a single value capable of encapsulating multiple key-value pairs.&#x20;
+
+:::hint{type="info"}
+For more information, see the *Platform Manual *> [Data Types](docId\:p7TLPgP3eGtQyRVKb45QS).
+:::
+
+## Lazy Loading
+
+To improve performance, instead of storing a file that encodes large amounts of binary data within a document, consider storing a reference to it in a separate, explicitly fetched object (token) known as an `ATTACHMENT`.&#x20;
+
+With the `ATTACHMENT` data type, you can implement *lazy loading*. Lazy loading is when you delay retrieval until necessary rather than aggressively fetching the data in anticipation of hypothetical future use. This "on-demand" retrieval pattern enhances performance by optimizing resource usage.&#x20;
+
+For a realworld usage scenario, see either the demo chat app for iOS or Android in the getditto > [demoapp-chat](https://github.com/getditto/demoapp-chat/tree/main) GitHub repository. For instance, in the [iOS demo chat app](https://github.com/getditto/demoapp-chat/tree/main/iOS), you can see a savvy implementation of `ATTACHMENT` with a full-resolution avatar image from a collection named `User`.
+
+## Relationship Models
+
+The following table provides a complete overview of the relationships you can establish in Ditto:&#x20;
+
+| **Relationship** | **Description**                                                                                                                                                           | **Approaches**                                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| One-to-many      | Associates a parent element with children elements to establish a hierarchy.&#x20;                                                                                        | *   Embed a JSON object (`REGISTER`)
+
+*   Embed a `MAP`
+
+*   Reference a field to a document&#x20;
+
+*   Reference a document to a collection&#x20; |
+| Many-to-many     | Associates multiple entities in one collection with multiple entities in another collection.&#x20;                                                                        | *    Embed a JSON object (`REGISTER`)
+
+*   Embed a `MAP`
+
+*   Create references between documents in different collections                         |
+| Many-to-one      | Associates two or more collections, where one collection refers to the primary key of another collection to create a meaningful relationship between the datasets. &#x20; | *   Embed a JSON object (`REGISTER`)
+
+*   Embed a `MAP`
+
+*   Create references between documents in different collections                          |
+
+For more information, see *Ditto Basics* > [CRUD Fundamentals](docId:_dbLSX1OFrQfMDfNxIY-C) and *Platform Manual *> [CRUD Operations](docId\:LBRSIPPkeZdqTGBM4i5NN).
+
+### Linking Through Foreign-Key Relationships
+
+There are two methods to linking related data items and organizing them for easy lookup: through an embedded JSON object that functions as a `REGISTER` type or through an embedded `MAP`.
+
+Both approaches use a foreign-key relationship to establish a structure resembling a parent-child hierarchy, where the key functions as the parent, and its encapsulated values, represented as a set of key-value pairs, serve as children.
+
+The choice between a `MAP` and an embedded JSON object that functions as a `REGISTER` depends on your app's usage patterns and the specific conflict resolution requirements in your data model.&#x20;
+
+:::hint{type="info"}
+For more information, see the *Platform Manual *> [Document Model](docId:9MYRdDK_tB4IU-dluCbVs) > [Evaluation Criteria](docId\:QL8kiAtbSKkpzwYPIYdbe).
+:::
+
