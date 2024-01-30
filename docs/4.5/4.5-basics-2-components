@@ -1,0 +1,160 @@
+---
+title: Core Components
+slug: basics/core-components
+createdAt: 2023-08-09T17:43:20.605Z
+updatedAt: 2024-01-25T16:45:27.732Z
+---
+
+This article provides a high-level overview of the main components that make up the Ditto platform, along with the standard terminology used throughout the documentation.
+
+![](https://archbee-image-uploads.s3.amazonaws.com/qoRkNxW5fJ81r_NqVpc8C/DolVGAvMFiDGcCSUjlDgX_dql-anatomy.png)
+
+# Components Overview
+
+The following table provides an overview of standard Ditto terms and definitions to be familiar with:
+
+| **Item** | **Term**                  | **Definition**                                                                                                                                                                                                            |
+| -------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1        | Small Peer                | Your app integrated with the Ditto SDK. The Ditto SDK consists of both the local Ditto store and the functionality that enables platform capabilities. ([Ditto Basics](docId\:QMBZjcmYAv17MucJM7bc6))                     |
+| 2        | Big Peer                  | A cloud deployment that appears like any other peer within the decentralized network, but with elevated access permissions and advanced capabilities. ([Ditto Basics](docId\:QMBZjcmYAv17MucJM7bc6))                      |
+| 3        | Auth Service              | The `OnlineWithAuthentication` API that you use to request your access credentials for authentication. ([Onboarding](docId\:UUFFlh8kUJSsgS5Pc6mTO)  and [Authentication and Initialization](docId:7jSFl90n9c8vhPhRsJOxk)) |
+| 4        | HTTP API                  | The API you can use to programmatically interact with the Big Peer. ([HTTP API](docId\:WzYBu1UpzlCQ-ia3HqURC))                                                                                                            |
+| 5        | Change Data Capture (CDC) | The premium upgrade to implement realtime event streaming from Ditto to your own third-party database and Apache Kafka topics. ([Change Data Capture](docId\:BO2PzSHDHcJLHYtgzCpR6))                                      |
+
+# Sync Concepts
+
+Data *synchronization, *or "sync" for short, refers broadly to the practice of ensuring that peers always have the most up-to-date and accurate information.&#x20;
+
+However, data sync goes beyond basic updates and involves sophisticated techniques like *partitioning* and *replication*:* *
+
+*   Partitioning is a strategy that involves dividing the data into smaller, more manageable pieces called *partitions*. &#x20;
+
+
+*   These partitions are then asynchronously copied across connected Small Peers. That is, the copies of the data, or *replicas*, are distributed across separate storage locations running locally within an end-user's physical environment, such as a mobile device.
+
+Partitioning and sync are central to ensuring rapid and dependable data access for your end users.
+
+## Multiplexer for Intelligent Sync
+
+Ditto incorporates a *multiplexer *inside the peer-to-peer mesh network to facilitate the data sync process.&#x20;
+
+Developed by Ditto, the multiplexer is an intelligent sync machine that seamlessly switches between active transport types as needed, without duplicating data.
+
+In addition, the multiplexer breaks data packets down into small fragments and then, once received on the other side, reassembles them.
+
+When the transports collaborate in parallel and the multiplexer automatically switches between them to establish the most optimal connection, these diverse transport types collectively form what is known as the *rainbow connection *— each color of the rainbow symbolizes a different transport type:
+
+<https://www.youtube.com/watch?v=8_A1CkYfzoM&t=3s>
+
+## Conflict-Free Sync
+
+In Ditto's decentralized architecture, data propagates asynchronously among offline peers, eliminating the need for a centralized authority like a central server to validate and merge database operations.
+
+This decentralized model, however, presents the possibility of *concurrency conflicts*. A concurrency conflict happens when multiple end users make changes to the same data items at the same time. When merging these changes, any inconsistencies collide.&#x20;
+
+To resolve these concurrency conflicts, as well as enable optimizations like delta-based replication, Ditto harnesses the power of conflict-free replicated data type (*CRDT*) technology. CRDT is an advanced class of data type designed to manage and replicate data changes in a way that allows multiple distributed peers to make updates concurrently without the need to reach a consensus to form a single meaningful value for merge.
+
+For an overview of the different CRDTs that Ditto offers, see [Data Structures and Types](docId\:vq2Ofsn8txVRvK2SpKXan).&#x20;
+
+# Communication Transports
+
+Ditto’s peer-to-peer network architecture utilizes the following diverse set of communication transport technologies and communication channels to achieve seamless, offline-first connections between devices:
+
+*   [Core Components](docId\:j4JXkdrYYTOFKekaFTCqz)
+
+*   [Core Components](docId\:j4JXkdrYYTOFKekaFTCqz)
+
+*   [Core Components](docId\:j4JXkdrYYTOFKekaFTCqz)
+
+*   [Core Components](docId\:j4JXkdrYYTOFKekaFTCqz)
+
+By leveraging a diverse set of technologies, Ditto supports a variety of use cases, devices, and environments. 
+
+:::hint{type="info"}
+By default, peers use all available transports available to their devices. For instructions on how to enable and disable transports, see the *Platform Manual *> [Transports](docId\:yEkicCJf07IUZYt9joSlw) > [Configuring Transports](docId\:NRxqMBYDfXzIHFnP1r7FO).
+:::
+
+## Bluetooth Low Energy
+
+Ditto utilizes both traditional Wi-Fi and Bluetooth Low Energy (LE) to maintain a continuous mesh network of Transmission Control Protocol (TCP) connections.
+
+Bluetooth LE technology forms low-powered and high-distance connections between devices, making it highly performant in offline scenarios when replicating small amounts of data. 
+
+:::hint{type="info"}
+In the event of a Wi-Fi network disruption, such as a router getting disconnected, Ditto does not automatically switch transports to establish an independent Bluetooth LE connection as a fallback.&#x20;
+
+Instead, Ditto actively works to maintain the previously established Wi-Fi and Bluetooth LE connections.&#x20;
+:::
+
+The following video provides a brief visual overview of how Ditto uses Bluetooth LE to form low-powered high-distance connections between devices. 
+
+:::hint{type="info"}
+The distances and bandwidth limitations and capacities illustrated in the video are approximations and vary depending on the Bluetooth® firmware installed on the device.&#x20;
+:::
+
+
+
+![](https://archbee-image-uploads.s3.amazonaws.com/qoRkNxW5fJ81r_NqVpc8C/xX8cTqTKbloV09pe9E5VU_ble2.gif)
+
+:::hint{type="info"}
+For detailed information, see *Platform Manual *> [Transports](docId\:yEkicCJf07IUZYt9joSlw).
+:::
+
+## Peer-to-Peer Wi-Fi
+
+Available on most devices, standard peer-to-peer Wi-Fi enables direct, point-to-point connections between peers without requiring traditional network infrastructure like a centralized server, router, or access point.&#x20;
+
+In addition to standard peer-to-peer Wi-Fi, Ditto incorporates a customized multiplexer to increase frequency, speed, and efficiency of data transmission between peers connected in the mesh network.&#x20;
+
+The following table provides an overview of the Wi-Fi technologies Ditto supports:
+
+| **Platform** | **Ditto-Supported Technology**    |
+| ------------ | --------------------------------- |
+| Apple        | Apple Wireless Direct Link (AWDL) |
+| Android      | Wi-Fi Aware                       |
+| Windows      | Wi-Fi Aware                       |
+
+The following video illustrates Ditto’s sophisticated and decentralized approach to peer-to-peer Wi-Fi connections between distributed peers connected in the mesh network:
+
+:::hint{type="info"}
+The maximum distance of a connection can vary depending on the specific peer-to-peer transport type being used.
+:::
+
+![](https://archbee-image-uploads.s3.amazonaws.com/qoRkNxW5fJ81r_NqVpc8C/bwiEGfjmSo3iQf4ZzXqf7_p2p2.gif)
+
+:::hint{type="info"}
+For detailed information, see *Platform Manual *> [Transports](docId\:yEkicCJf07IUZYt9joSlw).
+:::
+
+## Local Area Network
+
+When devices are connected over the same Wi-Fi access point or through other means like an Ethernet cable, they can take advantage of a local area network (*LAN*), if available, to communicate directly with each other without requiring internet access.&#x20;
+
+A LAN is an interconnected network made up of devices that are physically near each other, such as a home, enterprise, or college campus.
+
+:::hint{type="info"}
+For detailed information, see *Platform Manual *> [Transports](docId\:yEkicCJf07IUZYt9joSlw).
+:::
+
+## WebSockets
+
+Peers use *WebSocket* connections to enable realtime, bidirectional sync between Small Peers and the optional cloud deployment, the *Big Peer.*
+
+:::hint{type="info"}
+Before you can establish a connection with the Big Peer using a WebSocket, you need to specify an IP/PORT. For instructions, see *Platform Manual *> [Configuring Transports](docId\:NRxqMBYDfXzIHFnP1r7FO).
+:::
+
+The defining attributes of a WebSocket include:
+
+*   Requires an internet connection to establish peer-to-peer communication.
+
+
+*   Unlike the other peer-to-peer transport types, does not automatically discover other peers physically nearby.
+
+
+*   WebSocket connections can be made over a Transmission Control Protocol (TCP) or Local Area Network (LAN).
+
+:::hint{type="info"}
+For detailed information, see *Platform Manual *> [Transports](docId\:yEkicCJf07IUZYt9joSlw).
+:::
+
