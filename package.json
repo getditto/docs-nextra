@@ -19,6 +19,7 @@
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
     "@mdx-js/react": "^2.3.0",
+    "js-cookie": "^3.0.5",
     "next": "^13.0.6",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
