@@ -1,5 +1,7 @@
 import React from "react"
 import { DocsThemeConfig } from "nextra-theme-docs"
+import LanguageSelector from "./components/language/selector"
+import LanguageProvider from "./components/language/provider"
 
 const config: DocsThemeConfig = {
   logo: (
@@ -19,12 +21,15 @@ const config: DocsThemeConfig = {
       />
     </svg>
   ),
-  project: {
-    link: "https://github.com/shuding/nextra-docs-template",
-  },
-  docsRepositoryBase: "https://github.com/getditto/docs-nextra",
   footer: {
     text: "© 2024 DittoLive Inc. All rights reserved",
+  },
+  navbar: {
+    extraContent: (props) => (
+      <LanguageProvider>
+        <LanguageSelector />
+      </LanguageProvider>
+    ),
   },
 }
 
