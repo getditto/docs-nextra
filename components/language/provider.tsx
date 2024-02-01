@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 
 const LanguageProvider = ({ children }) => {
   const router = useRouter()
-  const [language, setLanguage] = useState(Cookies.get("language") || null)
+  const [language, setLanguage] = useState(Cookies.get("language") || undefined)
 
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage)
