@@ -4,6 +4,7 @@ title: Testing Doc v1
 
 import { Tabs } from "nextra/components"
 import { Topic } from "../topics"
+import Conditional from "../components/conditional"
 
 # Welcome to Ditto
 
@@ -108,3 +109,11 @@ Risus nec feugiat in fermentum posuere urna nec. A cras semper auctor neque vita
         - Rhoncus aenean vel elit scelerisque mauris pellentesque **Sed Nisi**.
 
         - In dictum non consectetur a erat nam at lectusk **Et Pharetra**.
+
+<Conditional lang="javascript">
+  ```This is for JS```
+</Conditional>
+
+<Conditional lang="java">
+  ```This is for Java```
+</Conditional>
