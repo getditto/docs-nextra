@@ -15,7 +15,7 @@ const LanguageProvider = ({ children }) => {
     router.push(
       `${router.pathname}?${currentUrlParams.toString()}`,
       undefined,
-      { shallow: false }
+      { shallow: false, scroll: false}
     )
   }
 

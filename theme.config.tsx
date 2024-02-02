@@ -31,6 +31,13 @@ const config: DocsThemeConfig = {
       </LanguageProvider>
     ),
   },
+  main({children}) {
+    return (
+      <LanguageProvider>
+        {children}
+      </LanguageProvider>
+    )
+  }
 }
 
 export default config
