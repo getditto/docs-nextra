@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import LanguageContext from "./context"
+import languagesData from "./languages"
 
 const LanguageSelector = () => {
   const { language, handleLanguageChange } = useContext(LanguageContext)
@@ -9,11 +10,11 @@ const LanguageSelector = () => {
       value={language}
       onChange={(event) => handleLanguageChange(event.target.value)}
     >
-      <option value="javascript">JavaScript</option>
-      <option value="java">Java</option>
-      <option value="csharp">C#</option>
-      <option value="cpp">C++</option>
-      <option value="rust">Rust</option>
+      {languagesData.map((language) => (
+        <option key={language.id} value={language.id}>
+          {language.label}
+        </option>
+      ))}
     </select>
   )
 }

@@ -1,4 +1,10 @@
 {
-  "index": "Welcome to Ditto",
+  "index": {
+    "title": "Welcome to Ditto",
+    "theme": {
+      "layout": "full",
+      "pagination": false
+    }
+  },
   "testing_doc": "Testing Doc"
 }
