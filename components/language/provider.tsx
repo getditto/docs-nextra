@@ -15,7 +15,7 @@ const LanguageProvider = ({ children }) => {
     router.push(
       `${router.pathname}?${currentUrlParams.toString()}`,
       undefined,
-      { shallow: false, scroll: false}
+      { shallow: false, scroll: false }
     )
   }
 
@@ -32,7 +32,7 @@ const LanguageProvider = ({ children }) => {
       handleLanguageChange(languageFromCookie)
     } else if (!language) {
       // default language
-      handleLanguageChange("javascript")
+      handleLanguageChange("js")
     }
   }, [router.asPath])
 

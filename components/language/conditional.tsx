@@ -1,10 +1,9 @@
 import { useContext, useState, useEffect } from "react"
-import LanguageContext from "./language/context"
+import LanguageContext from "./context"
 
-const Conditional = ({ lang, children }) => {
+const LanguageConditional = ({ lang, children }) => {
   const { language } = useContext(LanguageContext)
   const [isLoaded, setIsLoaded] = useState(false)
-
 
   // Copilot added this because of hydration issues
   useEffect(() => {
@@ -20,4 +19,4 @@ const Conditional = ({ lang, children }) => {
   return lang === language ? children : null
 }
 
-export default Conditional
+export default LanguageConditional

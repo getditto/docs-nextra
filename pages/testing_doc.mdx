@@ -1,26 +1,14 @@
----
-title: Testing Doc v1
----
-
 import { Tabs } from "nextra/components"
 import { Topic } from "../topics"
-import Conditional from "../components/conditional"
+import LanguageConditional from "../components/language/conditional"
 
 # Welcome to Ditto
 
-## {Topic("generic_quickstart_intro")}
-
-<pre>
-  <code>{Topic("js")}</code>
-</pre>
-
-# Dolor Sit Amet
-
 Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-## Duis Aute
+## Selected Language
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+The selected language is **<LanguageConditional lang="javascript">JavaScript</LanguageConditional><LanguageConditional lang="java">Java</LanguageConditional><LanguageConditional lang="csharp">C#</LanguageConditional><LanguageConditional lang="cpp">C++</LanguageConditional><LanguageConditional lang="rust">Rust</LanguageConditional>**
 
 ### Excepteur Sint
 
@@ -109,11 +97,3 @@ Risus nec feugiat in fermentum posuere urna nec. A cras semper auctor neque vita
         - Rhoncus aenean vel elit scelerisque mauris pellentesque **Sed Nisi**.
 
         - In dictum non consectetur a erat nam at lectusk **Et Pharetra**.
-
-<Conditional lang="javascript">
-  ```This is for JS```
-</Conditional>
-
-<Conditional lang="java">
-  ```This is for Java```
-</Conditional>

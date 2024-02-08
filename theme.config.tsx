@@ -25,19 +25,15 @@ const config: DocsThemeConfig = {
     text: "© 2024 DittoLive Inc. All rights reserved",
   },
   navbar: {
-    extraContent: (props) => (
+    extraContent: () => (
       <LanguageProvider>
         <LanguageSelector />
       </LanguageProvider>
     ),
   },
-  main({children}) {
-    return (
-      <LanguageProvider>
-        {children}
-      </LanguageProvider>
-    )
-  }
+  main({ children }) {
+    return <LanguageProvider>{children}</LanguageProvider>
+  },
 }
 
 export default config
