@@ -6,5 +6,26 @@
       "pagination": false
     }
   },
-  "testing_doc": "Testing Doc"
+  "testing_doc": "Testing Doc",
+
+  "cpp": {
+    "title": "C++",
+    "type": "page"
+  },
+  "csharp": {
+    "title": "C#",
+    "type": "page"
+  },
+  "java": {
+    "title": "Java",
+    "type": "page"
+  },
+  "js": {
+    "title": "JavaScript",
+    "type": "page"
+  },
+  "rust": {
+    "title": "Rust",
+    "type": "page"
+  }
 }
