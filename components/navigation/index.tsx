@@ -13,6 +13,7 @@ type NavigationProps = {
 const Navigation = ({ pageMap, route }: NavigationProps) => {
   const { language } = useContext(LanguageContext)
   const [isLoaded, setIsLoaded] = useState(false)
+  const languageIds = new Set(languagesData.map((lang) => lang.id))
 
   useEffect(() => {
     if (language !== undefined) {
@@ -20,72 +21,57 @@ const Navigation = ({ pageMap, route }: NavigationProps) => {
     }
   }, [language])
 
+  const renderLink = (item, active = false) => (
+    <Link
+      key={item.name}
+      href={item.route}
+      className={`${s.link} ${active && s.active}`}
+    >
+      {item.name}
+    </Link>
+  )
+
+  const languageFolders = pageMap.filter(
+    (item) => item.kind === "Folder" && languageIds.has(item.name)
+  )
+  const otherFolders = pageMap.filter(
+    (item) => item.kind === "Folder" && !languageIds.has(item.name)
+  )
+  const pages = pageMap.filter((item) => item.kind === "MdxPage")
+
   return (
     <>
       {isLoaded && (
         <nav className={s.nav}>
-          {pageMap.map((item) => {
-            if (item.kind === "MdxPage") {
-              return (
-                <Link
-                  key={item.name}
-                  href={item.route}
-                  className={`${s.link} ${item.route === route && s.active}`}
-                >
-                  {item.name}
-                </Link>
-              )
-            }
+          {pages.length > 0 && (
+            <ul>
+              {pages.map((item) => renderLink(item, item.route === route))}
+            </ul>
+          )}
 
-            // languages folders
-            else if (
-              item.kind === "Folder" &&
-              languagesData.map((lang) => lang.id).includes(item.name) &&
-              item.name === language
-            ) {
-              return (
-                item.children &&
-                item.children.map(
-                  (child) =>
-                    child.kind === "MdxPage" && (
-                      <Link
-                        key={child.name}
-                        href={child.route}
-                        className={`${s.link} ${
-                          child.route === route && s.active
-                        }`}
-                      >
-                        {child.name}
-                      </Link>
-                    )
+          {otherFolders.length > 0 && (
+            <ul>
+              {otherFolders.map((item) =>
+                item.children?.map(
+                  (child) => child.kind === "MdxPage" && renderLink(child)
                 )
-              )
-            }
+              )}
+            </ul>
+          )}
 
-            // other folders
-            else if (
-              item.kind === "Folder" &&
-              !languagesData.map((lang) => lang.id).includes(item.name)
-            ) {
-              return (
-                item.children &&
-                item.children.map(
-                  (child) =>
-                    child.kind === "MdxPage" && (
-                      <Link
-                        key={child.name}
-                        href={child.route}
-                        className={s.link}
-                      >
-                        {child.name}
-                      </Link>
-                    )
-                )
-              )
-            }
-
-            return null
-          })}
+          {languageFolders.length > 0 && (
+            <ul>
+              {languageFolders.map(
+                (item) =>
+                  item.name === language &&
+                  item.children?.map(
+                    (child) =>
+                      child.kind === "MdxPage" &&
+                      renderLink(child, child.route === route)
+                  )
+              )}
+            </ul>
+          )}
         </nav>
       )}
     </>
