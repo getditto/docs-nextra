@@ -1,22 +1,12 @@
 import Link from "next/link"
 import Head from "next/head"
-import { useContext, useEffect, useState } from "react"
-import LanguageContext from "../language/context"
-import s from "./layout.module.css"
 import LanguageSelector from "../language/selector"
-import languagesData from "../language/languages"
+import Navigation from "../navigation"
+
+import s from "./layout.module.css"
 
 const Layout = ({ children, pageOpts }) => {
-  const { title, frontMatter, headings, pageMap } = pageOpts
-  const { language } = useContext(LanguageContext)
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  // Copilot added this because of hydration issues
-  useEffect(() => {
-    if (language !== undefined) {
-      setIsLoaded(true)
-    }
-  }, [language])
+  const { title, frontMatter, headings, pageMap, route } = pageOpts
 
   return (
     <>
@@ -51,81 +41,14 @@ const Layout = ({ children, pageOpts }) => {
           <LanguageSelector />
         </header>
 
+        <Navigation pageMap={pageMap} route={route} />
+
         {headings.length > 0 && (
           <ul className={s.table}>
             {headings.map((heading) => (
               <li key={heading.value}>{heading.value}</li>
             ))}
           </ul>
-        )}
-
-        {isLoaded && (
-          <nav className={s.nav}>
-            {pageMap.map((item) => {
-              if (item.kind === "MdxPage") {
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.route}
-                    className={`${s.link} ${
-                      item.route === pageOpts.route && s.active
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                )
-              }
-
-              // languages folders
-              else if (
-                item.kind === "Folder" &&
-                languagesData.map((lang) => lang.id).includes(item.name) &&
-                item.name === language
-              ) {
-                return (
-                  item.children &&
-                  item.children.map(
-                    (child) =>
-                      child.kind === "MdxPage" && (
-                        <Link
-                          key={child.name}
-                          href={child.route}
-                          className={`${s.link} ${
-                            child.route === pageOpts.route && s.active
-                          }`}
-                        >
-                          {child.name}
-                        </Link>
-                      )
-                  )
-                )
-              }
-
-              // other folders
-              else if (
-                item.kind === "Folder" &&
-                !languagesData.map((lang) => lang.id).includes(item.name)
-              ) {
-                return (
-                  item.children &&
-                  item.children.map(
-                    (child) =>
-                      child.kind === "MdxPage" && (
-                        <Link
-                          key={child.name}
-                          href={child.route}
-                          className={s.link}
-                        >
-                          {child.name}
-                        </Link>
-                      )
-                  )
-                )
-              }
-
-              return null
-            })}
-          </nav>
         )}
 
         <div className={s.content}>{children}</div>

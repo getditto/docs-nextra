@@ -20,33 +20,6 @@
   color: #fff;
 }
 
-.link {
-  border-radius: 4px;
-  color: #fff;
-  font-weight: 600;
-  padding: 4px 8px;
-  text-decoration: none;
-}
-
-.active {
-  background-color: blue;
-  pointer-events: none;
-}
-
-.link:hover {
-  color: #ccc;
-}
-
-.nav {
-  position: fixed;
-  top: 80px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 12vw;
-}
-
 .table {
   position: fixed;
   top: 80px;
