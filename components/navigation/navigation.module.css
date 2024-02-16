@@ -8,7 +8,7 @@
   width: 12vw;
 }
 
-.nav ul {
+.nav > div {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -16,9 +16,20 @@
   padding: 0;
 }
 
-.nav ul:not(:first-child) {
+.nav > div:not(:first-child) {
   border-top: 1px solid #ccc;
   padding-top: 16px;
+}
+
+.nav > div > div {
+  padding-left: 0;
+}
+
+.folder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 16px;
 }
 
 .link {
