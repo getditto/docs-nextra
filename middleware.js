@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import languagesData from "./components/language/languages"
 
-export function middleware(request) {
+export const middleware = async (request) => {
   const supportedLanguages = new Set(
     languagesData.map((language) => language.id)
   )
@@ -21,8 +21,19 @@ export function middleware(request) {
   ) {
     pathParts[1] = cookieLanguage
     const newPathname = pathParts.join("/")
+    const newUrl = new URL(newPathname, request.url)
+    const homeUrl = new URL("/", request.url)
 
-    return NextResponse.redirect(new URL(newPathname, request.url))
+    try {
+      const response = await fetch(newUrl, { method: "HEAD" })
+      if (response.status !== 404) {
+        return NextResponse.redirect(newUrl)
+      } else {
+        return NextResponse.redirect(homeUrl)
+      }
+    } catch (error) {
+      return NextResponse.redirect(homeUrl)
+    }
   }
 
   return NextResponse.next()
