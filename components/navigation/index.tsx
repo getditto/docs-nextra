@@ -1,6 +1,7 @@
-import { Link } from "nextra-theme-docs"
-import languagesData from "../language/languages"
 import { useContext, useEffect, useState, useMemo } from "react"
+import { Link } from "nextra-theme-docs"
+import * as Accordion from "@radix-ui/react-accordion"
+import languagesData from "../language/languages"
 import LanguageContext from "../language/context"
 
 import s from "./navigation.module.css"
@@ -26,16 +27,46 @@ const Folder = ({ folder, isLanguageFolder = false, language, route }) => {
   }
 
   return (
-    <div key={folder.name} className={s.folder}>
-      {folder.children?.map((child) => {
-        if (child.kind === "MdxPage") {
-          return <Page page={child} route={route} />
-        } else if (child.kind === "Folder") {
-          return <Folder folder={child} language={language} route={route} />
-        }
-        return null
-      })}
-    </div>
+    <Accordion.Root type="single" collapsible>
+      <Accordion.Item value="item-1" className={s.folder}>
+        <Accordion.Trigger className={s.folderTitle}>
+          <span>{folder.name}</span>
+          <svg
+            fill="none"
+            stroke="currentColor"
+            className={s.chevron}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="m9 5 7 7-7 7"
+              className="nx-origin-center nx-transition-transform rtl:-nx-rotate-180"
+            />
+          </svg>
+        </Accordion.Trigger>
+        <Accordion.Content className={s.folderContent}>
+          {folder.children?.map((child, index) => {
+            if (child.kind === "MdxPage") {
+              return (
+                <Page page={child} route={route} key={index + child.name} />
+              )
+            } else if (child.kind === "Folder") {
+              return (
+                <Folder
+                  folder={child}
+                  language={language}
+                  route={route}
+                  key={index + child.name}
+                />
+              )
+            }
+            return null
+          })}
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   )
 }
 
@@ -82,28 +113,34 @@ const Navigation = ({ pageMap, route }: NavigationProps) => {
         <nav className={s.nav}>
           {pages.length > 0 && (
             <div>
-              {pages.map((page) => (
-                <Page page={page} route={route} />
+              {pages.map((page, index) => (
+                <Page page={page} route={route} key={index + page.name} />
               ))}
             </div>
           )}
 
           {otherFolders.length > 0 && (
             <div>
-              {otherFolders.map((folder) => (
-                <Folder folder={folder} language={language} route={route} />
+              {otherFolders.map((folder, index) => (
+                <Folder
+                  folder={folder}
+                  language={language}
+                  route={route}
+                  key={index + folder.name}
+                />
               ))}
             </div>
           )}
 
           {languageFolders.length > 0 && (
             <div>
-              {languageFolders.map((folder) => (
+              {languageFolders.map((folder, index) => (
                 <Folder
                   folder={folder}
                   isLanguageFolder={true}
                   language={language}
                   route={route}
+                  key={index + folder.name}
                 />
               ))}
             </div>

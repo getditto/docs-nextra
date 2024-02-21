@@ -25,26 +25,55 @@
   padding-left: 0;
 }
 
-.folder {
+.folder,
+.folderContent {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.folderContent {
   padding-left: 16px;
 }
 
+.folderTitle {
+  align-items: center;
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.folderTitle,
 .link {
   border-radius: 4px;
   color: #fff;
+  cursor: pointer;
+  font-size: 16px;
   font-weight: 600;
   padding: 4px 8px;
   text-decoration: none;
+  transition: all 200ms ease;
 }
 
+.folderTitle:hover,
 .link:hover {
+  background-color: #333;
   color: #ccc;
 }
 
 .active {
   background-color: blue;
   pointer-events: none;
+}
+
+.chevron {
+  height: 16px;
+  width: 16px;
+  transition: transform 200ms;
+}
+
+.folderTitle[data-state="open"] > .chevron {
+  transform: rotate(90deg);
 }
