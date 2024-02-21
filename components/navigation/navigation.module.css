@@ -29,10 +29,10 @@
 .folderContent {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .folderContent {
+  gap: 8px;
   padding-left: 16px;
 }
 
@@ -76,4 +76,8 @@
 
 .folderTitle[data-state="open"] > .chevron {
   transform: rotate(90deg);
+}
+
+.folder[data-state="open"] > .folderContent {
+  margin-top: 8px;
 }
